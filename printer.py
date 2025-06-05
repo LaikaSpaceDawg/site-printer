@@ -57,7 +57,52 @@ def print_text_line_by_line(printer, text, line_length=48):
         if current_line:
             printer.text(current_line + '\n')
 
-def start_server(ip, port):
+def start_http_server(ip, port):
+    try:
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind((ip, port))
+        server_socket.listen(5)
+
+        print(f"HTTP server listening on {ip}:{port}")
+
+        while True:
+            client_socket, client_address = server_socket.accept()
+            try:
+                request = client_socket.recv(1024).decode('utf-8')
+                # Parse HTTP request
+                if request.startswith('GET / '):
+                    # Respond with HTTP 200 OK
+                    response = (
+                        "HTTP/1.1 200 OK\r\n"
+                        "Content-Type: text/plain\r\n"
+                        "Access-Control-Allow-Origin: *\r\n"  # CORS header
+                        "Content-Length: 2\r\n"
+                        "\r\n"
+                        "OK"
+                    )
+                    client_socket.sendall(response.encode('utf-8'))
+                else:
+                    # Respond with HTTP 404 Not Found for other requests
+                    response = (
+                        "HTTP/1.1 404 Not Found\r\n"
+                        "Content-Type: text/plain\r\n"
+                        "Content-Length: 9\r\n"
+                        "\r\n"
+                        "Not Found"
+                    )
+                    client_socket.sendall(response.encode('utf-8'))
+
+            except Exception as e:
+                print(f"An error occurred: {e}")
+            finally:
+                client_socket.close()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        server_socket.close()
+
+def start_printer_server(ip, port):
     VENDOR_ID = 0x04b8
     PRODUCT_ID = 0x0e27
 
@@ -66,7 +111,7 @@ def start_server(ip, port):
         server_socket.bind((ip, port))
         server_socket.listen(1)
 
-        print(f"Server listening on {ip}:{port}")
+        print(f"Printer server listening on {ip}:{port}")
 
         while True:
             client_socket, client_address = server_socket.accept()
@@ -108,7 +153,10 @@ def start_server(ip, port):
         server_socket.close()
 
 if __name__ == "__main__":
-    LISTEN_IP = "0.0.0.0"
-    LISTEN_PORT = 9100
+    # Start HTTP server for status checks
+    from threading import Thread
+    http_thread = Thread(target=start_http_server, args=('0.0.0.0', 8080))
+    http_thread.start()
 
-    start_server(LISTEN_IP, LISTEN_PORT)
+    # Start printer server
+    start_printer_server('0.0.0.0', 9100)
