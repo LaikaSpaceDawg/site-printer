@@ -7,6 +7,7 @@ Should run on anything that has WiFi, and supports python, and has two cores. (N
 ## Installation Instructions
 - Download
 - Swap PID and VID to that of your individual printer.
+
   (They are easiest to find via `lsusb`, however Windows Device Manager will also show them if you dig through properties.)
 - Setup a `systemctl` Service or Similar (Optional)
 - Run
