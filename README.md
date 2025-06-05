@@ -1,12 +1,16 @@
 # :fax: ESCPOS Thermal Printer Webserver
 
+Simple Webserver using Sockets designed to add WiFi functionality to POS Printers, with use of a Raspberry Pi or similar.
+
 ## Installation
 Designed for Raspberry Pi
 
-Should run on anything that has WiFi, and supports python, and has two cores. (No Guarantees)
+Should run on any Debian (Or Close) Device that has WiFi, and supports Python, and has two cores. (No Guarantees)
+
+Should also run on Arch or Ubuntu, but is :warning: untested.
 ## Installation Instructions
 - Download
-- Swap PID and VID to that of your individual printer.
+- Swap PID and VID to that of your individual printer. `Default are for a EPSON TM-T20IIIL`
 
   (They are easiest to find via `lsusb`, however Windows Device Manager will also show them if you dig through properties.)
 - Setup a `systemctl` Service or Similar (Optional)
