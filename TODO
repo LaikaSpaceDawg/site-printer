@@ -1,1 +1,9 @@
 have backlog not cut between every message?
+add support for psuedo markdown tags?
+	for instance:
+	<center> to center align text between them
+		would require more preprocessing, probably computing the length of each line, padding with spaces 
+		on either end equally as needed to reach the wrap threshold
+	<right> to right align
+		would require more preprocessing, probably also line length but only pad the right up to 48
+	<left> is default and does not need tags
