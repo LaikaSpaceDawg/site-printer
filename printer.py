@@ -58,14 +58,19 @@ def save_backlog(jobs):
 def print_text_line_by_line(printer, text, line_length=48):
     lines = text.split('\n')
     for line in lines:
+        words = line.split(' ')
         current_line = ""
-        index = 0
-        while index < len(line):
-            if len(current_line) + 1 > line_length:
+        for word in words:
+            # Check if adding the word would exceed the line length
+            if len(current_line) + len(word) + (1 if current_line else 0) > line_length:
                 printer.text(current_line + '\n')
-                current_line = ""
-            current_line += line[index]
-            index += 1
+                current_line = word
+            else:
+                # Add the word to the current line
+                if current_line:
+                    current_line += ' '  # Add a space before the word
+                current_line += word
+        # Don't forget to print the last line if it exists
         if current_line:
             printer.text(current_line + '\n')
 
