@@ -22,6 +22,12 @@ Should also run on Arch or Ubuntu, but is :warning: untested.
 If the printer cannot be reached, default behavior is to queue messages for when it can.
 #### Printing
 The webserver simply prints anything sent to the correct port via a POST, and then cuts the paper.*
+#### Authentication
+The webserver's default behavior has been updated to only print requests from devices that embed the correct user-specified secret key in the header of the request.
+
+Secret key should be prepended as "Authorization: [KEY]", and match the key held by the printer.
+
+Default printer key location is ./key, the file should only contain a copy of the secret key.
 
 #### Default Ports
 - `9100`: Responds to POST Requests by Printing Message Contents
@@ -29,4 +35,6 @@ The webserver simply prints anything sent to the correct port via a POST, and th
 
 *Server is designed to run locally, and absolutely should NEVER be exposed to WAN.
 
-*Server WILL print anything sent to `9100` (Or Custom Port) via a POST request.
+~~Server WILL print anything sent to `9100` (Or Custom Port) via a POST request.~~
+
+Server will now only print from a device that properly embeds a matching token in the header, however this is able to be disabled, and trivial to break depending on user-specified secret key strength.
